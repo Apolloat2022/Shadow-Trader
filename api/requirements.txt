@@ -1,0 +1,11 @@
+# Shadow Trader — API Lambda Layer Dependencies
+# Install with: pip install -r requirements.txt -t ./api_layer/python/
+
+# PyArrow for reading Gold Parquet cache (no Spark needed)
+pyarrow==17.0.0
+
+# HTTP requests (used by shared utilities if needed)
+requests==2.32.3
+
+# fsspec for optional s3 URI handling
+fsspec==2024.10.0

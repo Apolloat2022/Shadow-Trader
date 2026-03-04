@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shadow Trader — Live Signals</title>
+  <meta name="description" content="Shadow Trader real-time market signal dashboard. Powered by Alpha Vantage intraday data and technical indicator analysis." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ── Header ───────────────────────────────────────────────────── -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+            <path d="M14 2L26 8V20L14 26L2 20V8L14 2Z" stroke="url(#hex-grad)" stroke-width="1.5" fill="none"/>
+            <path d="M14 7L20 10.5V17.5L14 21L8 17.5V10.5L14 7Z" fill="url(#hex-fill)" opacity="0.6"/>
+            <circle cx="14" cy="14" r="2.5" fill="url(#hex-grad)"/>
+            <defs>
+              <linearGradient id="hex-grad" x1="2" y1="2" x2="26" y2="26" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#00d4ff"/>
+                <stop offset="100%" stop-color="#7c3aed"/>
+              </linearGradient>
+              <linearGradient id="hex-fill" x1="8" y1="7" x2="20" y2="21" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.4"/>
+                <stop offset="100%" stop-color="#7c3aed" stop-opacity="0.4"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div>
+          <h1 class="brand-title">Shadow Trader</h1>
+          <span class="brand-subtitle">Paper Trading Intelligence</span>
+        </div>
+      </div>
+
+      <div class="header-meta">
+        <div class="refresh-ring" id="refreshRing" title="Auto-refreshes every 60s">
+          <svg class="refresh-svg" viewBox="0 0 36 36">
+            <circle cx="18" cy="18" r="15" class="refresh-track"/>
+            <circle cx="18" cy="18" r="15" class="refresh-progress" id="refreshProgress"/>
+          </svg>
+          <span class="refresh-count" id="refreshCount">60</span>
+        </div>
+        <div class="last-updated">
+          <span class="status-dot" id="statusDot"></span>
+          <span id="lastUpdated">Loading…</span>
+        </div>
+        <button class="btn-refresh" id="manualRefresh" title="Refresh now">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+            <path d="M1.5 7.5A6 6 0 1 0 7.5 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M1.5 3.5V7.5H5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Refresh
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Portfolio Strip ────────────────────────────────────────────── -->
+  <section class="portfolio-strip">
+    <div class="portfolio-inner">
+      <div class="portfolio-stat">
+        <span class="stat-label">Portfolio Value</span>
+        <span class="stat-value" id="statPortfolioValue">—</span>
+      </div>
+      <div class="portfolio-divider"></div>
+      <div class="portfolio-stat">
+        <span class="stat-label">Cash</span>
+        <span class="stat-value" id="statCash">—</span>
+      </div>
+      <div class="portfolio-divider"></div>
+      <div class="portfolio-stat">
+        <span class="stat-label">Open Positions</span>
+        <span class="stat-value" id="statPositions">—</span>
+      </div>
+      <div class="portfolio-divider"></div>
+      <div class="portfolio-stat">
+        <span class="stat-label">Total Trades</span>
+        <span class="stat-value" id="statTrades">—</span>
+      </div>
+      <div class="portfolio-divider"></div>
+      <div class="portfolio-stat">
+        <span class="stat-label">Unrealised P&amp;L</span>
+        <span class="stat-value" id="statPnl">—</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Filter Bar ─────────────────────────────────────────────────── -->
+  <div class="filter-bar">
+    <div class="filter-inner">
+      <span class="filter-label">Filter:</span>
+      <button class="filter-btn active" data-filter="ALL">All</button>
+      <button class="filter-btn buy"    data-filter="BUY">🟢 BUY</button>
+      <button class="filter-btn sell"   data-filter="SELL">🔴 SELL</button>
+      <button class="filter-btn hold"   data-filter="HOLD">⚪ HOLD</button>
+      <span class="filter-count" id="filterCount"></span>
+    </div>
+  </div>
+
+  <!-- ── Signal Cards ───────────────────────────────────────────────── -->
+  <main class="main">
+    <div class="cards-grid" id="cardsGrid">
+      <!-- Populated by app.js -->
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+    </div>
+
+    <!-- Empty state -->
+    <div class="empty-state" id="emptyState" style="display:none;">
+      <div class="empty-icon">📡</div>
+      <p>No signals match this filter.</p>
+    </div>
+  </main>
+
+  <!-- ── Trade History ──────────────────────────────────────────────── -->
+  <section class="trades-section">
+    <div class="trades-inner">
+      <h2 class="section-title">
+        <span class="section-icon">📋</span>
+        Recent Trades
+      </h2>
+      <div class="trades-table-wrapper">
+        <table class="trades-table" id="tradesTable">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Ticker</th>
+              <th>Action</th>
+              <th>Qty</th>
+              <th>Price</th>
+              <th>Notional</th>
+              <th>P&amp;L</th>
+              <th>Signal</th>
+            </tr>
+          </thead>
+          <tbody id="tradesBody">
+            <tr class="trades-placeholder">
+              <td colspan="8">Loading trade history…</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span>Shadow Trader · Paper Trading Platform · Powered by Alpha Vantage + Databricks</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+# Shadow Trader - Lambda Layer Dependencies
+# Install with: pip install -r requirements.txt -t ./lambda_layer/python/
+
+# HTTP requests to Alpha Vantage API
+requests==2.32.3
+
+# Data manipulation and transformation
+pandas==2.2.3
+
+# Columnar in-memory format and Parquet I/O (required by pandas for Parquet)
+pyarrow==17.0.0
+
+# fsspec is required by pandas for s3fs-backed I/O (optional but recommended)
+fsspec==2024.10.0

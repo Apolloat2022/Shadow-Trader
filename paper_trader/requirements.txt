@@ -1,0 +1,5 @@
+# Shadow Trader — Paper Trading Engine Lambda Layer Dependencies
+# Install with: pip install -r requirements.txt -t ./paper_trader_layer/python/
+
+# PyArrow for reading Gold signals_cache Parquet
+pyarrow==17.0.0

@@ -1,0 +1,10 @@
+{
+  "Records": [
+    {
+      "s3": {
+        "bucket": { "name": "shadow-trader-bronze-robin-2026" },
+        "object": { "key": "raw/crypto_prices/BTC_20260304_022832.parquet" }
+      }
+    }
+  ]
+}

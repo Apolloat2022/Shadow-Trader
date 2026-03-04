@@ -1,0 +1,30 @@
+# .gitignore — Shadow Trader
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── Secrets — NEVER commit ────────────────────────────────────────────────────
+infra/terraform.tfvars
+*.tfvars
+!*.tfvars.example
+
+# ── Terraform state & cache ───────────────────────────────────────────────────
+**/.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfstate.*.backup
+.terraform.lock.hcl
+
+# ── Lambda build artifacts ────────────────────────────────────────────────────
+infra/.build/
+*.zip
+
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+
+# ── OS artifacts ──────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db

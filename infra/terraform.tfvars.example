@@ -1,0 +1,46 @@
+# terraform.tfvars.example
+# ─────────────────────────────────────────────────────────────────────────────
+# Copy this file to terraform.tfvars and fill in your actual values.
+# NEVER commit terraform.tfvars to source control — it contains secrets.
+# Add terraform.tfvars to your .gitignore.
+# ─────────────────────────────────────────────────────────────────────────────
+
+# AWS region
+aws_region  = "us-east-1"
+
+# Deployment environment: dev | staging | prod
+environment = "dev"
+
+# ── Alpha Vantage ─────────────────────────────────────────────────────────────
+# Free tier: 5 req/min, 500 req/day. Premium removes limits.
+# Alternatively, set via environment variable: export TF_VAR_alphavantage_api_key=...
+alphavantage_api_key = "YOUR_ALPHA_VANTAGE_API_KEY_HERE"
+
+# Comma-separated tickers (mix of equities and crypto)
+tickers = "BTC,NVDA,ETH"
+
+# ── S3 Buckets ────────────────────────────────────────────────────────────────
+# Bucket names are suffixed with the environment automatically.
+# e.g. "shadow-trader-bronze-dev"
+bronze_bucket_name = "shadow-trader-bronze"
+silver_bucket_name = "shadow-trader-silver"
+gold_bucket_name   = "shadow-trader-gold"
+
+# Objects expire after this many days (0 = disabled)
+s3_lifecycle_expiration_days = 90
+
+# ── Lambda ────────────────────────────────────────────────────────────────────
+lambda_function_name   = "shadow-trader-ingestion"
+lambda_memory_mb       = 512
+lambda_timeout_seconds = 300
+lambda_runtime         = "python3.12"
+
+# ── Scheduling ────────────────────────────────────────────────────────────────
+# EventBridge rate/cron expression. Examples:
+#   "rate(1 hour)"               -- every hour
+#   "rate(24 hours)"             -- once a day
+#   "cron(0 8 * * ? *)"          -- daily at 08:00 UTC
+schedule_expression = "rate(1 hour)"
+
+# ── CloudWatch ────────────────────────────────────────────────────────────────
+log_retention_days = 30

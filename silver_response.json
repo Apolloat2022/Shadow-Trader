@@ -1,0 +1,1 @@
+{"errorMessage": "Syntax error in module 'lambda_function': source code string cannot contain null bytes", "errorType": "Runtime.UserCodeSyntaxError", "requestId": "", "stackTrace": ["  File \"None\" Line None\n    None"]}
